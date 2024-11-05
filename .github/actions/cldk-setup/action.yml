@@ -1,0 +1,28 @@
+name: 'Additional Test Setup'
+description: 'Additional Test Setup for CLDK'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Install Ollama
+      shell: bash
+      run: |
+        curl -fsSL https://ollama.com/install.sh | sudo -E sh
+
+    - name: Start Ollama server
+      shell: bash
+      run: |
+        nohup ollama serve &
+        sleep 5
+        time curl -i http://localhost:11434
+
+    - name: Pull Granite model
+      shell: bash
+      run: |
+        ollama pull granite-code:3b
+
